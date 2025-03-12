@@ -1,0 +1,64 @@
+import pygame
+import math
+
+# Initialize Pygame
+pygame.init()
+
+# Screen settings
+WIDTH, HEIGHT = 500, 500
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Interactive Swirling Ball")
+
+# Colors
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+
+# Circle settings
+center_x, center_y = WIDTH // 2, HEIGHT // 2
+radius = 100  # Radius of swirling motion
+angle = 0  # Starting angle
+speed = 0.05  # Speed of swirling
+
+# Player-controlled movement
+move_x, move_y = 0, 0
+move_speed = 5
+
+# Game loop
+running = True
+while running:
+    pygame.time.delay(10)
+    screen.fill(WHITE)  # Clear screen
+
+    # Handle events
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    # Get key presses
+    keys = pygame.key.get_pressed()
+    
+    if keys[pygame.K_LEFT]:
+        move_x -= move_speed  # Move left
+    if keys[pygame.K_RIGHT]:
+        move_x += move_speed  # Move right
+    if keys[pygame.K_UP]:
+        move_y -= move_speed  # Move up
+    if keys[pygame.K_DOWN]:
+        move_y += move_speed  # Move down
+    if keys[pygame.K_ESCAPE]:  # Exit game
+        running = False
+
+    # Calculate ball position using sin & cos (circular motion)
+    ball_x = center_x + move_x + int(radius * math.cos(angle))
+    ball_y = center_y + move_y + int(radius * math.sin(angle))
+
+    # Draw the ball
+    pygame.draw.circle(screen, RED, (ball_x, ball_y), 20)
+
+    # Update angle for swirling motion
+    angle += speed
+
+    # Update display
+    pygame.display.update()
+
+pygame.quit()
